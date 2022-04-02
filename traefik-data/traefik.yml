@@ -30,11 +30,11 @@ entryPoints:
     address: :80
     # (Optional) Redirect to HTTPS
     # ---
-    # http:
-    #   redirections:
-    #     entryPoint:
-    #       to: websecure
-    #       scheme: https
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
 
   websecure:
     address: :443
@@ -46,6 +46,15 @@ providers:
     # watch for dynamic configuration changes
     filename: /configurations/dynamic.yml
     watch: true
+
+certificatesResolvers:
+  letsEncrypt:
+    acme:
+      email: artemon3162@gmail.com
+      storage: /configurations/acme.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: http
 
 
 # admin:$apr1$sKBHlHih$b/f06ClcSFAbmiLsBnx4K0

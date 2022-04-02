@@ -1,7 +1,14 @@
 # # DYNAMIC CONFIGURATION
-# http:
-#   middlewares:
-#     test-auth:
-#       basicAuth:
-#         users:
-#           - "admin:$apr1$E5GNsjwl$7DJhRNfWuHoclcbDbG4/30"
+http:
+  # routers:
+  #   nginx:
+  #     rule: Host(`nginx.localhost`)
+  #     entrypoints:
+  #     - web
+  #     middlewares:
+  #     - redirect-to-https
+  # middlewares:
+  #   redirect-to-https:
+  #     redirectScheme:
+  #       scheme: https
+  #       permanent: false
