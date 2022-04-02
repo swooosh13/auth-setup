@@ -54,7 +54,7 @@ certificatesResolvers:
       storage: /configurations/acme.json
       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
       httpChallenge:
-        entryPoint: http
+        entryPoint: web
 
 
 # admin:$apr1$sKBHlHih$b/f06ClcSFAbmiLsBnx4K0
