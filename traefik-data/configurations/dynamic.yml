@@ -1,0 +1,7 @@
+# # DYNAMIC CONFIGURATION
+# http:
+#   middlewares:
+#     test-auth:
+#       basicAuth:
+#         users:
+#           - "admin:$apr1$E5GNsjwl$7DJhRNfWuHoclcbDbG4/30"

@@ -1,9 +1,24 @@
 version: '3.7'
 services:
+  portainer:
+    image: portainer/portainer
+    container_name: portainer
+    hostname: portainer
+    networks:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.$MY_DOMAIN`)"
   nginx:
     image: nginx:latest
     container_name: nginx
     hostname: nginx
+    networks:
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.entrypoints=web"
@@ -12,15 +27,33 @@ services:
     image: traefik:v2.6
     container_name: traefik
     hostname: traefik
+    networks:
+      - proxy
     ports:
       # The HTTP port
       - "80:80"
       - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/traefik.yml:/traefik.yml:ro
+      - ./traefik-data/traefik.yml:/traefik.yml:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./traefik-data/configurations:/configurations:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.$MY_DOMAIN`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      # Middlewares
+      - "traefik.http.routers.dashboard.middlewares=dashboard_auth"
+      # Creates 2 auth middlewares
+      - "traefik.http.middlewares.dashboard_auth.basicauth.users=admin:$$apr1$$E5GNsjwl$$7DJhRNfWuHoclcbDbG4/30"
 
+volumes:
+  portainer_data:
 
+networks:
+  proxy:
+    external: false
+    name: "proxy"
